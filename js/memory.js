@@ -5,11 +5,49 @@ let arrayAnimali = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '�
 
 let arrayComparison = [];
 
-document.body.onload = startGame();
-
 // mi serviranno alcune variabili 1. interval 2. una agganciata alla classe find 
 // 3. una agganciata al'id modal 4. una agganciata alla classe timer
 
+
+//1. setInterval per chiamare una funzione ogni tot millisecondi che avra' un counter--; countdown entro il quale devi terminare il gioco
+
+let sec = 30; // valori di partenza  
+let min = 2;
+let timer;
+printTimer();
+
+function countdown() {
+
+    sec--;         // countdown parte da 30 secondi e decresce al richiamo della funzione
+    if(sec <= 0) { // se i secondi sono inferiori/uguali a 0
+        min--;     // i minuti scendono di 1
+        sec = 60;  // i secondi salgono a 60
+    }
+
+    if(min <= -1) { // resetta
+        clearInterval(countdown);
+        // aggiungere risultato di game over
+        min = 0;
+        sec = 0;
+    }
+
+    printTimer();
+}
+
+setInterval(countdown, 1000);
+
+function printTimer() {
+    document.querySelector('.text-center .timer').innerHTML = 'Tempo: ' + +min + ' min ' + +sec + ' sec';
+
+}
+
+//2. var appesa alla classe find
+
+//3. var appesa all'id modal
+
+//4. var appesa alla classe timer
+
+//5. funzione che mescola randomicamente elementi array passato
 
 //una funzione che serve a mescolare in modo random gli elementi dell'array che viene passato 
 // (l'array contiene le icone degli animali)
@@ -27,6 +65,17 @@ function shuffle(a) {
     return a;
 }
 // una funzione che rimuove la classe active e chiama la funzione startGame()
+
+function remove_active() {
+
+
+    startGame();
+}
+
+function startGame() {
+
+    countdown();
+}
 
 // la funzione startGame che pulisce il timer, dichiara un array vuoto, mescola casualmente l'array degli animali
 // (var arrayShuffle = shuffle(arrayAnimali);), aggancia il contenitore con id griglia, 
@@ -90,3 +139,6 @@ function displayIcon() {
 // una funzione che nasconde la modale alla fine e riavvia il gioco
 
 // una funzione che calcola il tempo e aggiorna il contenitore sotto
+
+
+document.body.onload = startGame();
