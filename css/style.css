@@ -15,7 +15,8 @@
 .icon-grid {
 /* flex! */
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .show {
