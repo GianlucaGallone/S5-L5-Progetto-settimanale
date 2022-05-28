@@ -26,19 +26,17 @@ document.body.onload = gamePreview(); // al caricamento della pagina chiama la f
 //#endregion
 
 function pressStart() { // Gioco e Timer collegati al pulsante Start
-    timerStop();  // 1) stop all'intervallo precedente
+    timerStop();  // stop all'intervallo precedente
     clearTimer(); // pulizia del div
-    
     gameInit();   // caricamento contenuto del gioco
-    timerStart(); // 2) caricamento nuovo intervallo
-
+    printTimer();
+    timerStart(); // caricamento nuovo intervallo
 }
 
 function pressRestart() {
     stop();
     timerStop();  // stop all'intervallo precedente
     clearTimer(); // pulizia del div
-    
     gameInit();   // caricamento contenuto del gioco
     timerStart(); // caricamento nuovo intervallo
 }
@@ -94,34 +92,34 @@ function gameInit() {    // Ciclo creazione 2 div cont ed icone, e evento onclic
     }
 }
 
-let sec = 10; // valori di partenza  
-let min = 0;
+let sec = 59; // valori di partenza  
+let min = 1;
 
-//poi al click del pulsante start chiama setInterval con funzione:
 function timerInit() {   // Timer countdown della partita
 
     sec--;         // i secondi decrescono al richiamo della funzione
-    if(sec <= 0) { // se i secondi sono inferiori/uguali a 0
-        min--;     // i minuti scendono di 1
-        sec = 59;  // i secondi salgono a 59
+    if(sec <= 0) { // secondi sono inferiori/uguali a 0
+        min--;     // scendono i minuti
+        sec = 59;  // si ricaricano i sec
     }
-/*     if(min <= -1) { 
-        timerStop();   // ferma intervallo     
-        min = 0;
-        sec = 10;
-        printResult(); // stampa game over
-    }  */
 
-    printTimer();  // stampi il timer
-    console.log(timer);
+    printTimer();
+
+    if(min <= -1) {    // -1 = game over
+        timerStop();   // ferma intervallo
+        printResult(); // stampa game over     
+        min = 1;
+        sec = 59;      // ripristina valori iniziali
+    } 
 }
 
 function timerStart() {
+    min = 1; 
+    sec = 59; // ripristina valori iniziali
     interval = setInterval(timerInit, 1000);
 }
 
 function timerStop() {
-    
     clearInterval(interval);
 }
 
@@ -133,7 +131,6 @@ function printResult() {
 }
 
 function clearTimer() {  // Cancella il testo nel div
-
     timer.innerHTML = '';
 }
 
