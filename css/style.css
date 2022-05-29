@@ -10,8 +10,8 @@ body {
     background-attachment: fixed;
     background-size: cover;
     background-repeat: unset;
-    padding: 20px 0;
-    margin-top: 30px;
+    padding-top: 5px;
+    margin: auto;
 }
 .container {
     padding: 10px;
@@ -32,8 +32,10 @@ body {
 }
 
 .timer {
+    background-color: rgba(255, 255, 255,0.5);
+    display: inline-block;
     padding: 10px 0;
-    font-size: 1.5em;
+    font-size: 2.5em;
 }
 
 @keyframes strike { /* animazione quando si indovina */
@@ -107,19 +109,19 @@ body {
 }
 
 .button {
-    color: white;
-    font-size: 22px;
+    animation: touch 0.5 linear;
+    color: black;
+    font-size: 30px;
     text-align: center;
     margin-top: 10px;
-    padding: 10px;
-    background-color: orange;
+    padding: 20px 120px;
+    background-color: rgb(255, 119, 0);
     border: 1px solid #3889c4;
     border-radius: 5px;
 }
 
 .button:hover {
     background-color: orangered;
-    border: none;
 }
 
 @media (max-width: 600px) { /* Tablet */
