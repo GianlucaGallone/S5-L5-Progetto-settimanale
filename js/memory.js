@@ -8,7 +8,6 @@ let min = 2;
 let snd_select = new Audio('snd/snd_select.mp3');
 let snd_correct = new Audio('snd/snd_correct.mp3');
 let snd_startgame = new Audio('snd/snd_startgame.mp3');
-
 let snd_victory = new Audio('snd/snd_victory.mp3');
 let snd_gameover = new Audio('snd/snd_gameover.mp3');
 
@@ -16,6 +15,7 @@ const start = document.querySelector('.text-center .start');
 const timer = document.querySelector('.text-center .timer');
 const grid = document.getElementById('griglia');
 const found = document.getElementsByClassName('icon show find disabled');
+
 
 document.body.onload = gamePreview(); // al caricamento della pagina chiama la funzione e genera il contenuto
 
@@ -43,6 +43,7 @@ function pressRestart() {
 function gamePreview() { // Schermata Preview del gioco senza input
     timer.innerHTML = 'Memory Game: 3 minutes to win!';
     
+    
     let startButton = document.createElement('input'); // Creazione elemento
     startButton.type = 'button';
     startButton.id = 'button';
@@ -51,7 +52,7 @@ function gamePreview() { // Schermata Preview del gioco senza input
     startButton.onclick = function() {pressStart();}   // Assegnare funzione ad evento onclick
     start.appendChild(startButton);                    // Scriverlo nel nodo                                
     
-
+    grid.style.pointerEvents = 'none';                 // i div non si possono cliccare
     grid.innerHTML = '';                                 
     for(i=0; i<24; i++) {
         let divCont = document.createElement('div');          
@@ -72,7 +73,8 @@ function gameInit() {    // Ciclo creazione 2 div cont ed icone, e evento onclic
     arrayComparison = [];
     var arrayShuffle = shuffle(arrayAnimali);            // gli passo la funzione shuffle con all'interno le icone                
     grid.innerHTML = '';                                 // pulisco tutto il contenuto al riavvio del browser/button ricomincia
-    
+    grid.style.pointerEvents = 'initial';                // sono in grado di cliccare i div
+
     for(i=0; i<24; i++) {
         let divCont = document.createElement('div');     // div contenitore
         let divIcon = document.createElement('div');     // div con icona dentro
@@ -129,7 +131,7 @@ function printGameOver() {
 function printResult() {
     snd_correct.pause();
     snd_victory.play();
-    timer.innerHTML = 'Congratulations you won! Best Score:' + '';
+    timer.innerHTML = 'Congratulations you won! <br>' + 'Time left: ' + +min + ' min ' + +sec + ' sec';
 }
 
 function clearTimer() {  // Cancella il testo nel div
@@ -193,7 +195,8 @@ function displayIcon() {
 function displayResult() { // Fine partita mostra risultato
 
     console.log(found);     // inizialmente riporta una HTML Collection vuota
-    if (found.length==24) { // se la lunghezza degli elem trovati e' 24
+    if (found.length==2) { // se la lunghezza degli elem trovati e' 24
+        grid.style.pointerEvents = 'none'; // rende i div non cliccabili
         stop();
         timerStop(); 
         clearTimer();
