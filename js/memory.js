@@ -43,7 +43,6 @@ function pressRestart() {
 function gamePreview() { // Schermata Preview del gioco senza input
     timer.innerHTML = 'Memory Game: 3 minutes to win!';
     
-    
     let startButton = document.createElement('input'); // Creazione elemento
     startButton.type = 'button';
     startButton.id = 'button';
@@ -195,7 +194,7 @@ function displayIcon() {
 function displayResult() { // Fine partita mostra risultato
 
     console.log(found);     // inizialmente riporta una HTML Collection vuota
-    if (found.length==2) { // se la lunghezza degli elem trovati e' 24
+    if (found.length==24) { // se la lunghezza degli elem trovati e' 24
         grid.style.pointerEvents = 'none'; // rende i div non cliccabili
         stop();
         timerStop(); 
