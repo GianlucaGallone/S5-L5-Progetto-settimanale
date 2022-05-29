@@ -36,15 +36,12 @@
     padding: 10px 0;
     font-size: 0.8em;
 }
-.timer span {
-    font-size: 1.3em;
-}
 
 .icon {
     font-size: 70px;
     text-align: center;
     visibility: visible !important;
-    opacity: 100;
+    opacity: 0;
     cursor: pointer;
 }
 
@@ -52,9 +49,30 @@
     pointer-events: none;
     cursor: wait;
 }
+/* --------------------------------------------------------- */
+
+@keyframes indovinato { /* animazione quando si indovina */
+    from {
+    }
+    to {
+    }
+}
+
+@keyframes rotazione-carta { /* animazione quando ruota la carta */
+    from {
+    }
+    50% {
+    }
+    to {
+    }
+}
 
 .show {
     /* agganciare animation-name rotazione carta */
+    animation-name: rotazione-carta;
+    opacity: 100;
+    visibility: visible;
+    
     animation-duration: .5s;
     background-color: white;
     border: 1px solid #3889c4;
@@ -133,18 +151,3 @@
     }
 }
 
-@keyframes indovinato { /* animazione quando si indovina */
-    from {
-    }
-    to {
-    }
-}
-
-@keyframes rotazione-carta { /* animazione quando ruota la carta */
-    from {
-    }
-    50% {
-    }
-    to {
-    }
-}

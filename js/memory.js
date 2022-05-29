@@ -2,8 +2,11 @@ let arrayAnimali = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '�
 let arrayComparison = [];
 const start = document.querySelector('.text-center .start');
 const timer = document.querySelector('.text-center .timer');
-let interval;
 const modalFind = document.querySelector('#modal');
+let interval;
+let sec = 59; // valori di partenza  
+let min = 2;
+
 
 document.body.onload = gamePreview(); // al caricamento della pagina chiama la funzione e genera il contenuto
 
@@ -52,14 +55,14 @@ function gamePreview() { // Schermata Preview del gioco senza input
     startButton.onclick = function() {pressStart();}   // Assegnare funzione ad evento onclick
     start.appendChild(startButton);                    // Scriverlo nel nodo                                
     
-    var iconsFind = document.getElementById('griglia');       
-    timer.innerHTML = 'Memory Game: 5 minutes to win!'; 
-    iconsFind.innerHTML = '';                                 
+    var grid = document.getElementById('griglia');       
+    timer.innerHTML = 'Memory Game: 3 minutes to win!'; 
+    grid.innerHTML = '';                                 
     for(i=0; i<24; i++) {
         let divCont = document.createElement('div');          
         let divIcon = document.createElement('div');          
         divIcon.className = 'icon';                           
-        iconsFind.appendChild(divCont).appendChild(divIcon);                    
+        grid.appendChild(divCont).appendChild(divIcon);                    
     }
 }
 
@@ -69,31 +72,32 @@ function gameInit() {    // Ciclo creazione 2 div cont ed icone, e evento onclic
     let restartButton = document.querySelector('.text-center .start input#button');
     restartButton.value = 'Restart';
     restartButton.onclick = function() {pressRestart();}
-
-    var arrayShuffle = shuffle(arrayAnimali);                 // gli passo la funzione shuffle con all'interno le icone                
-    var iconsFind = document.getElementById('griglia');       // assegno alla var cards il div html (non il contenuto)
+    arrayComparison = [];
+    var arrayShuffle = shuffle(arrayAnimali);            // gli passo la funzione shuffle con all'interno le icone                
+    var grid = document.getElementById('griglia');       // assegno alla var cards il div html (non il contenuto)
     
-    iconsFind.innerHTML = '';                                 // pulisco tutto il contenuto al riavvio del browser/button ricomincia
+    grid.innerHTML = '';                                 // pulisco tutto il contenuto al riavvio del browser/button ricomincia
+/*     while(grid.hasChildNodes()) {
+        grid.removeChild(grid.firstChild);
+    } */
+    
     for(i=0; i<24; i++) {
         let divCont = document.createElement('div');          // div contenitore
         let divIcon = document.createElement('div');          // div con icona dentro
         divIcon.className = 'icon';                           // assegno classe icon
         
-        iconsFind.appendChild(divCont).appendChild(divIcon);  // assegno il div alla destinazione e assegno le icone
+        grid.appendChild(divCont).appendChild(divIcon);       // assegno il div alla destinazione e assegno le icone
         divIcon.innerHTML = arrayShuffle[i];                  // assegno shuffle(icone) nel div delle icone
-        
-/*         let iconClass = document.querySelector('#griglia>div');
-        iconClass.addEventListener('click', function(){
-
-            shuffle(a);
-            displayIcon();
-            
-        }) */
     }
-}
 
-let sec = 59; // valori di partenza  
-let min = 1;
+    var icon = document.getElementsByClassName("icon");
+    var icons = [...icon];
+    for (i=0; i<icons.length; i++) {
+        icons[i].addEventListener('click', displayIcon);
+        /* icons[i].addEventListener('click', openModal); */
+    }
+
+}
 
 function timerInit() {   // Timer countdown della partita
 
@@ -108,13 +112,13 @@ function timerInit() {   // Timer countdown della partita
     if(min <= -1) {    // -1 = game over
         timerStop();   // ferma intervallo
         printResult(); // stampa game over     
-        min = 1;
+        min = 2;
         sec = 59;      // ripristina valori iniziali
     } 
 }
 
 function timerStart() {
-    min = 1; 
+    min = 2; 
     sec = 59; // ripristina valori iniziali
     interval = setInterval(timerInit, 1000);
 }
@@ -126,6 +130,7 @@ function timerStop() {
 function printTimer() {
     timer.innerHTML = 'Tempo: ' + +min + ' min ' + +sec + ' sec';
 }
+
 function printResult() {
     timer.innerHTML = 'Game Over. Hai perso!';
 }
@@ -151,6 +156,7 @@ function shuffle(a) {
 }
 
 function displayIcon() {
+    var iconsFind = document.getElementsByClassName('find');
     var icon = document.getElementsByClassName("icon");
     var icons = [...icon];         // '...' operatore per passare array come argomento:
     this.classList.toggle("show"); // mette/toglie la classe show
@@ -158,7 +164,7 @@ function displayIcon() {
     var len = arrayComparison.length;
     
     if (len === 2) { // se nel confronto ci sono due elementi.
-        if (arrayComparison[0].innerHTML === arrayComparison[1].innerHTML) { // se uguali aggiunge la classe find
+        if (arrayComparison[0].innerHTML === arrayComparison[1].innerHTML && arrayComparison[0] !== arrayComparison[1]) { // se uguali aggiunge la classe find
             arrayComparison[0].classList.add("find", "disabled");
             arrayComparison[1].classList.add("find", "disabled");
             arrayComparison = [];
