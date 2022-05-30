@@ -1,4 +1,6 @@
-let arrayAnimali = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐰', '🐯', '🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐯', '🐰'];
+let arrayAnimaliEasy = ['🐵', '🐶', '🐴', '🐺', '🐷', '🐮', '🐵', '🐶', '🐴', '🐺', '🐷', '🐮'];
+let arrayAnimaliNormal = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐰', '🐯', '🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐯', '🐰'];
+let arrayAnimaliHard = ['🦖', '🐳', '🐢', '🐙', '🐞', '🐻', '🦈', '🦂', '🐲', '🦅', '🦃', '🦒', '🐌', '🐜', '🐟', '🐧', '🦕', '🐊', '🦖', '🐳', '🐢', '🐙', '🐞', '🐻', '🦈', '🦂', '🐲', '🦅', '🦃', '🦒', '🐌', '🐜', '🐟', '🐧', '🐊', '🦕'];
 let arrayComparison = [];
 
 let interval;
@@ -11,49 +13,114 @@ let snd_startgame = new Audio('snd/snd_startgame.mp3');
 let snd_victory = new Audio('snd/snd_victory.mp3');
 let snd_gameover = new Audio('snd/snd_gameover.mp3');
 
+let mobile = window.matchMedia('(max-width: 420px)');
+let tablet = window.matchMedia('(max-width: 600px)');
+let desktop = window.matchMedia('(min-width: 601px)');
+
 const start = document.querySelector('.text-center .start');
 const timer = document.querySelector('.text-center .timer');
 const grid = document.getElementById('griglia');
 const found = document.getElementsByClassName('icon show find disabled');
 
-
 document.body.onload = gamePreview(); // al caricamento della pagina chiama la funzione e genera il contenuto
 
-function pressStart() { // Gioco e Timer collegati al pulsante Start
+//#region ---------- Buttons onclick functions ----------------
+
+function startEasy() {   // Easy Difficulty Button
     snd_startgame.play();
-    timerStop();  // stop all'intervallo precedente
-    clearTimer(); // pulizia del div
-    gameInit();   // caricamento contenuto del gioco
+    timerStop(); 
+    clearTimer();
+    gameInitEasy();  
     printTimer();
-    timerStart(); // caricamento nuovo intervallo
+    timerStart();
 }
 
-function pressRestart() {
+function restartEasy() {
     snd_victory.pause();
     snd_startgame.play();
     stop();
-    timerStop();  // stop all'intervallo precedente
-    clearTimer(); // pulizia del div
-    gameInit();   // caricamento contenuto del gioco
-    timerStart(); // caricamento nuovo intervallo
+    timerStop();  
+    clearTimer(); 
+    gameInitEasy();
+    timerStart(); 
 }
 
-/* -------------------------------------------------------------------------------------------------------------------------- */
+function startNormal() { // Normal Difficulty Button
+    snd_startgame.play();
+    timerStop();      // stop all'intervallo precedente
+    clearTimer();     // pulizia del div
+    gameInitNormal(); // caricamento contenuto del gioco
+    printTimer();     // stampa il timer
+    timerStart();     // caricamento nuovo intervallo
+}
+
+function restartNormal() {
+    snd_victory.pause();
+    snd_startgame.play();
+    stop();
+    timerStop();      // stop all'intervallo precedente
+    clearTimer();     // pulizia del div
+    gameInitNormal(); // caricamento contenuto del gioco
+    timerStart();     // caricamento nuovo intervallo
+}
+
+function startHard() {  // Hard Difficulty Button
+    snd_startgame.play();
+    timerStop();     
+    clearTimer();     
+    gameInitHard(); 
+    printTimer();
+    timerStart();    
+}
+
+function restartHard() {
+    snd_victory.pause();
+    snd_startgame.play();
+    stop();
+    timerStop();     
+    clearTimer();   
+    gameInitHard();
+    timerStart();   
+}
+
+//#endregion
+
+//#region ------ Game Initialization & Buttons Creation ----------
 
 function gamePreview() { // Schermata Preview del gioco senza input
+    
     timer.innerHTML = 'Memory Game: 3 minutes to win!';
     
-    let startButton = document.createElement('input'); // Creazione elemento
-    startButton.type = 'button';
-    startButton.id = 'button';
-    startButton.className = 'button';
-    startButton.value = 'Start';                       // Testo da inserire
-    startButton.onclick = function() {pressStart();}   // Assegnare funzione ad evento onclick
-    start.appendChild(startButton);                    // Scriverlo nel nodo                                
+    /* ---- Creazione button easy ----- */
+
+    let btnEasy = document.createElement('input');
+    btnEasy.type = 'button';
+    btnEasy.id = 'btnEasy';
+    btnEasy.value = 'Easy';                       
+    btnEasy.onclick = function() {startEasy();}   
+    start.appendChild(btnEasy);                    
+
+    /* ---- Creazione button normal ----- */
+
+    let btnNormal = document.createElement('input'); // Creazione elemento
+    btnNormal.type = 'button';
+    btnNormal.id = 'btnNormal';
+    btnNormal.value = 'Normal';                      // Testo da inserire
+    btnNormal.onclick = function() {startNormal();}  // Assegnare funzione ad evento onclick
+    start.appendChild(btnNormal);                    // Scriverlo nel nodo   
+    
+    /* ---- Creazione button hard ----- */
+
+    let btnHard = document.createElement('input');
+    btnHard.type = 'button';
+    btnHard.id = 'btnHard';
+    btnHard.value = 'Hard';                       
+    btnHard.onclick = function() {startHard();}   
+    start.appendChild(btnHard);  
     
     grid.style.pointerEvents = 'none';                 // i div non si possono cliccare
-    grid.innerHTML = '';                                 
-    for(i=0; i<24; i++) {
+    grid.innerHTML = '';                               // pulisce eventuale contenuto  
+    for(i=0; i<24; i++) {                              // div placeholders
         let divCont = document.createElement('div');          
         let divIcon = document.createElement('div');          
         divIcon.className = 'icon';                           
@@ -61,20 +128,79 @@ function gamePreview() { // Schermata Preview del gioco senza input
     }    
 }
 
-function gameInit() {    // Ciclo creazione 2 div cont ed icone, e evento onclick
+function gameInitEasy() {
+
+    let restartBtnEasy = document.querySelector('.text-center .start #btnEasy');
+    let restartBtnNormal = document.querySelector('.text-center .start #btnNormal');
+    let restartBtnHard = document.querySelector('.text-center .start #btnHard');
 
     // Per selezionare e modificare un button esistente
-    let restartButton = document.querySelector('.text-center .start input#button');
-    restartButton.value = 'Restart';
-    restartButton.className = 'button';
-    restartButton.onclick = function() {pressRestart();}
+    restartBtnEasy.value = 'Restart';
+
+    // Media Queries tramite JS per spostare buttons dopo averli messi hidden
+
+    function mediaQ() {
+        if (desktop.matches) {                         // se la media matcha
+            restartBtnEasy.style.marginLeft = '275px'; // sposto il button al centro
+            restartBtnEasy.style.marginRight = '0';
+        } 
+        if (tablet.matches) {
+            restartBtnEasy.style.marginLeft = '0';
+            restartBtnEasy.style.marginRight = '-175px';
+        } 
+        if (mobile.matches) {
+            restartBtnEasy.style.marginRight = '-165px';
+        }
+    }    
+
+    mediaQ(desktop, tablet, mobile); // chiama la funzione all'avvio
+    desktop.addListener(mediaQ);     // attacca la funzione al cambiamento dello stato
+    tablet.addListener(mediaQ);
+    mobile.addListener(mediaQ);
+               
+    restartBtnNormal.style.visibility = 'hidden'; 
+    restartBtnHard.style.visibility = 'hidden';   
+    restartBtnEasy.onclick = function() {restartEasy();}
 
     arrayComparison = [];
-    var arrayShuffle = shuffle(arrayAnimali);            // gli passo la funzione shuffle con all'interno le icone                
-    grid.innerHTML = '';                                 // pulisco tutto il contenuto al riavvio del browser/button ricomincia
+    var arrayShuffle = shuffle(arrayAnimaliEasy);                      
+    grid.innerHTML = '';                                 
+    grid.style.pointerEvents = 'initial';                
+
+    for(i=0; i<12; i++) { // creazione 12 div
+        let divCont = document.createElement('div');    
+        let divIcon = document.createElement('div');     
+        divIcon.className = 'icon';                      
+        grid.appendChild(divCont).appendChild(divIcon);  
+        divIcon.innerHTML = arrayShuffle[i];             
+    }
+
+    var icon = document.getElementsByClassName("icon");
+    var icons = [...icon];
+    for (i=0; i<icons.length; i++) {                       
+        icons[i].addEventListener('click', displayIcon);   
+        icons[i].addEventListener('click', easyResult); 
+    }                                    
+}
+
+function gameInitNormal() {
+
+    // Per selezionare e modificare un button esistente
+    let restartBtnEasy = document.querySelector('.text-center .start #btnEasy');
+    let restartBtnNormal = document.querySelector('.text-center .start #btnNormal');
+    let restartBtnHard = document.querySelector('.text-center .start #btnHard');
+
+    restartBtnNormal.value = 'Restart';                  // Modifico il button normal
+    restartBtnEasy.style.visibility = 'hidden';          // Nascondo il button easy
+    restartBtnHard.style.visibility = 'hidden';          // Nascondo il button hard
+    restartBtnNormal.onclick = function() {restartNormal();}
+
+    arrayComparison = [];
+    var arrayShuffle = shuffle(arrayAnimaliNormal);      // gli passo la funzione shuffle con all'interno le icone                
+    grid.innerHTML = '';                                 // pulisco tutto il contenuto
     grid.style.pointerEvents = 'initial';                // sono in grado di cliccare i div
 
-    for(i=0; i<24; i++) {
+    for(i=0; i<24; i++) {                                // creazione 24 div
         let divCont = document.createElement('div');     // div contenitore
         let divIcon = document.createElement('div');     // div con icona dentro
         divIcon.className = 'icon';                      // assegno classe icon
@@ -86,9 +212,65 @@ function gameInit() {    // Ciclo creazione 2 div cont ed icone, e evento onclic
     var icons = [...icon];
     for (i=0; i<icons.length; i++) {                       // itera array passato nella var icons
         icons[i].addEventListener('click', displayIcon);   // e cicla due funzioni contemporaneamente
-        icons[i].addEventListener('click', displayResult); // visualizza risultato solo con 24 risp esatte
+        icons[i].addEventListener('click', normalResult); // visualizza risultato solo con 24 risp esatte
     }                                    
 }
+
+function gameInitHard() {
+
+    // Per selezionare e modificare un button esistente
+    let restartBtnEasy = document.querySelector('.text-center .start #btnEasy');
+    let restartBtnNormal = document.querySelector('.text-center .start #btnNormal');
+    let restartBtnHard = document.querySelector('.text-center .start #btnHard');
+
+    restartBtnHard.value = 'Restart';
+
+    // Media Queries tramite JS per spostare buttons dopo averli messi hidden
+
+    function mediaQ() { 
+        if (desktop.matches) {                          // se la media matcha
+            restartBtnHard.style.marginLeft = '-500px'; // sposto il button al centro
+        } else if (tablet.matches) {
+            restartBtnHard.style.marginLeft = '-150px';
+            restartBtnHard.style.padding = '10px 30px';
+        } else if (mobile.matches) {
+            restartBtnHard.style.marginLeft = '0';
+        }
+    }    
+
+    mediaQ(desktop, tablet, mobile); // chiama la funzione all'avvio
+    desktop.addListener(mediaQ);     // attacca la funzione al cambiamento dello stato
+    tablet.addListener(mediaQ);
+    mobile.addListener(mediaQ);
+
+    restartBtnEasy.style.visibility = 'hidden';
+    restartBtnNormal.style.visibility = 'hidden';
+    restartBtnHard.onclick = function() {restartHard();}
+
+    arrayComparison = [];
+    var arrayShuffle = shuffle(arrayAnimaliHard);                      
+    grid.innerHTML = '';                                 
+    grid.style.pointerEvents = 'initial';                
+
+    for(i=0; i<36; i++) { // creazione 36 div
+        let divCont = document.createElement('div');    
+        let divIcon = document.createElement('div');     
+        divIcon.className = 'icon';                      
+        grid.appendChild(divCont).appendChild(divIcon);  
+        divIcon.innerHTML = arrayShuffle[i];             
+    }
+
+    var icon = document.getElementsByClassName("icon");
+    var icons = [...icon];
+    for (i=0; i<icons.length; i++) {                       
+        icons[i].addEventListener('click', displayIcon);   
+        icons[i].addEventListener('click', hardResult); 
+    }                                    
+}
+
+//#endregion
+
+//#region ---------- Timer & Print Functions --------------
 
 function timerInit() {   // Timer countdown della partita
 
@@ -118,6 +300,10 @@ function timerStop() {
     clearInterval(interval);
 }
 
+function clearTimer() {  // Cancella il testo nel div
+    timer.innerHTML = '';
+}
+
 function printTimer() {
     timer.innerHTML = 'Time: ' + +min + ' min ' + +sec + ' sec';
 }
@@ -133,13 +319,11 @@ function printResult() {
     timer.innerHTML = 'Congratulations you won! <br>' + 'Time left: ' + +min + ' min ' + +sec + ' sec';
 }
 
-function clearTimer() {  // Cancella il testo nel div
-    timer.innerHTML = '';
-}
+//#endregion
 
-/* -------------------------------------------------------------------------------------------------------------------------- */
+//#region ---- Shuffle, Mostra icone & Risultati Partita ----
 
-function shuffle(a) {
+function shuffle(a) {     // Mischia le icone nell'array
     var currentIndex = a.length;
     var temporaryValue, randomIndex;
 
@@ -153,7 +337,7 @@ function shuffle(a) {
     return a;
 }
 
-function displayIcon() {
+function displayIcon() {  // Comparazione icone e mostra carte
     var iconsFind = document.getElementsByClassName('find');
     var icon = document.getElementsByClassName("icon");
     var icons = [...icon];         // '...' operatore per passare array come argomento:
@@ -191,10 +375,20 @@ function displayIcon() {
     }
 }
 
-function displayResult() { // Fine partita mostra risultato
+function easyResult() {   // Mostra risultato Easy
 
-    console.log(found);     // inizialmente riporta una HTML Collection vuota
-    if (found.length==24) { // se la lunghezza degli elem trovati e' 24
+    if (found.length==12) {
+        grid.style.pointerEvents = 'none';
+        stop();
+        timerStop(); 
+        clearTimer();
+        printResult(); 
+    }
+}
+
+function normalResult() { // Mostra risultato Normal
+
+    if (found.length==24) {                // se hai trovato tutte le carte
         grid.style.pointerEvents = 'none'; // rende i div non cliccabili
         stop();
         timerStop(); 
@@ -203,20 +397,15 @@ function displayResult() { // Fine partita mostra risultato
     }
 }
 
-//#region ---------------- Traccia --------------------
+function hardResult() {   // Mostra risultato Hard
 
-// mi serviranno alcune variabili 1. interval 2. una agganciata alla classe find 
-// 3. una agganciata al'id modal 4. una agganciata alla classe timer
-
-// una funzione che rimuove la classe active e chiama la funzione startGame()
-// la funzione startGame che pulisce il timer, dichiara un array vuoto, mescola casualmente l'array degli animali
-// (var arrayShuffle = shuffle(arrayAnimali);), aggancia il contenitore con id griglia, (alla var gli passo tutte le icone, lo ciclo e per ogni elemento creo una card)
-// pulisce tutti gli elementi che eventualmente contiene
-// poi fa ciclo per creare i 24 div child -> aggiunge la class e l'elemento dell'array in base all'indice progressivo
-// chiama la funzione timer e associa a tutti gli elementi (div) di classe icon l'evento click e le due funzioni definit sotto
-
-// una funzione che viene mostrata alla fine quando sono tutte le risposte esatte
-// una funzione che nasconde la modale alla fine e riavvia il gioco
-// una funzione che calcola il tempo e aggiorna il contenitore sotto
+    if (found.length==36) {               
+        grid.style.pointerEvents = 'none';
+        stop();
+        timerStop(); 
+        clearTimer();
+        printResult(); 
+    }
+}
 
 //#endregion
