@@ -309,6 +309,7 @@ function printTimer() {
 }
 
 function printGameOver() {
+    grid.style.pointerEvents = 'none';
     snd_gameover.play();
     timer.innerHTML = 'Game Over. You lose!';
 }
